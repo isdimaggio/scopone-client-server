@@ -28,7 +28,7 @@ public class RichiestaClient {
 
         // prendi il resto della stringa
         command = command1;
-        this.parameter = richiesta.substring(3);
+        this.parameter = richiesta.substring(2);
     }
 
     public int getCommand() {

@@ -6,6 +6,7 @@ public class UtenteLoggato {
 
     private String id;
     private String username;
+    private boolean mazzoRichiesto;
 
     public UtenteLoggato(String username) {
         // generazione id random utente
@@ -28,5 +29,13 @@ public class UtenteLoggato {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setMazzoRichiesto(){
+        mazzoRichiesto = true;
+    }
+
+    public boolean isMazzoRichiesto(){
+        return mazzoRichiesto;
     }
 }

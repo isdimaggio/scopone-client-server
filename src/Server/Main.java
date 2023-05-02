@@ -94,7 +94,11 @@ public class Main {
             }
             case RichiestaClient.DISTRIBUZ_COMMAND -> {
                 // autentica il client
-                if(!autenticazione(parametro)){
+                UtenteLoggato utenteLoggato;
+                try {
+                    utenteLoggato = autenticazione(parametro);
+                }
+                catch (Exception e){
                     System.out.println("Auth fallita");
                     return "ER"; // implementare err specifico
                 }
@@ -105,13 +109,20 @@ public class Main {
                     return "WA";
                 }
 
-                //distribuisci la carta
+                // controlla se ci sono ancora mappe
                 if(mappeUsate > 3){
                     System.out.println("Tutte le mappe usate");
                     return "ER"; // implementare err specifico
                 }
 
+                // vedi se il client ha già richiesto
+                if(utenteLoggato.isMazzoRichiesto()){
+                    System.out.println("Quel client ha gia richiesto il mazzo");
+                    return "ER"; // implementare err specifico
+                }
+
                 mappeUsate++;
+                utenteLoggato.setMazzoRichiesto();
                 return mappaCarte[mappeUsate-1];
 
             }
@@ -121,13 +132,13 @@ public class Main {
         }
     }
 
-    public static boolean autenticazione(String id) {
+    public static UtenteLoggato autenticazione(String id) throws Exception{
         for(UtenteLoggato u : listaUtenti){
             if(Objects.equals(id, u.getId())){
-                return true;
+                return u;
             }
         }
-        return false;
+        throw new Exception("Utente non trovato");
     }
 
 }
