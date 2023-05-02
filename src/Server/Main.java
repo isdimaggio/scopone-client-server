@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static Server.Utility.autenticazione;
+
 public class Main {
 
     static ServerSocket serverSocket;
@@ -126,19 +128,11 @@ public class Main {
                 return mappaCarte[mappeUsate-1];
 
             }
+
             default -> {
                 return "ER";
             }
         }
-    }
-
-    public static UtenteLoggato autenticazione(String id) throws Exception{
-        for(UtenteLoggato u : listaUtenti){
-            if(Objects.equals(id, u.getId())){
-                return u;
-            }
-        }
-        throw new Exception("Utente non trovato");
     }
 
 }

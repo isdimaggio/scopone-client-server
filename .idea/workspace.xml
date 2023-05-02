@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb60f921-36f9-403f-ae18-061ae56cfd3c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Server/Utility.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/RichiestaClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/RichiestaClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/UtenteLoggato.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/UtenteLoggato.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +57,7 @@
       <updated>1681541892700</updated>
       <workItem from="1682751544352" duration="4417000" />
       <workItem from="1682769993916" duration="1205000" />
-      <workItem from="1683015070952" duration="924000" />
+      <workItem from="1683015070952" duration="2602000" />
     </task>
     <task id="LOCAL-00001" summary="test server">
       <created>1682755370349</created>
@@ -66,7 +66,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682755370349</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="client non può richiedere piu volte il mazzo&#10;distribuzione fixata">
+      <created>1683016021945</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1683016021945</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -85,7 +92,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test server" />
-    <option name="LAST_COMMIT_MESSAGE" value="test server" />
+    <MESSAGE value="client non può richiedere piu volte il mazzo&#10;distribuzione fixata" />
+    <option name="LAST_COMMIT_MESSAGE" value="client non può richiedere piu volte il mazzo&#10;distribuzione fixata" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
