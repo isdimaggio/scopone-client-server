@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static Server.Utility.autenticazione;
+import static Server.Utility.getTurno;
 
 public class Main {
 
@@ -128,7 +129,48 @@ public class Main {
                 return mappaCarte[mappeUsate-1];
 
             }
+            case RichiestaClient.MOVE_REQUEST_COMMAND -> {
+                // vedi se ci sono abbastanza giocatori, altrimenti interrompi la partita
+                if(listaUtenti.size() != 4){
+                    System.out.println("Partita interrotta, non abbastanza utenti");
+                    return "PI";
+                }
 
+                // autentica il client
+                UtenteLoggato utenteLoggato;
+                try {
+                    utenteLoggato = autenticazione(parametro);
+                }
+                catch (Exception e){
+                    System.out.println("Auth fallita");
+                    return "ER"; // implementare err specifico
+                }
+
+                // vedi se è il turno del client
+                if(Objects.equals(utenteLoggato.getId(), getTurno())){
+                    System.out.println("È il turno per il client richiedente");
+                    return "TX";
+                }else{
+                    System.out.println("Non è il turno per il client richiedente");
+                    return "TN";
+                }
+
+            }
+            case RichiestaClient.QUIT_COMMAND -> {
+                // autentica il client
+                UtenteLoggato utenteLoggato;
+                try {
+                    utenteLoggato = autenticazione(parametro);
+                }
+                catch (Exception e){
+                    System.out.println("Auth fallita");
+                    return "ER"; // implementare err specifico
+                }
+
+                // autenticazione ok esci dalla partita
+                listaUtenti.remove(utenteLoggato);
+                return "PI";
+            }
             default -> {
                 return "ER";
             }

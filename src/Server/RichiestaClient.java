@@ -8,6 +8,7 @@ public class RichiestaClient {
     public static final int LOGIN_COMMAND = 1;
     public static final int DISTRIBUZ_COMMAND = 2;
     public static final int QUIT_COMMAND = 3;
+    public static final int MOVE_REQUEST_COMMAND = 4;
 
     public RichiestaClient(String richiesta) throws Exception{
         int command1 = 0;
@@ -23,6 +24,7 @@ public class RichiestaClient {
             case "AC" -> command1 = LOGIN_COMMAND;
             case "DS" -> command1 = DISTRIBUZ_COMMAND;
             case "QU" -> command1 = QUIT_COMMAND;
+            case "TU" -> command1 = MOVE_REQUEST_COMMAND;
             default -> throw new Exception("Invalid command " + comando);
         }
 
