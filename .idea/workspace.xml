@@ -4,19 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb60f921-36f9-403f-ae18-061ae56cfd3c" name="Changes" comment="Finito non testato">
-      <change afterPath="$PROJECT_DIR$/src/Commons/Carta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Prova Client Server.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ConnessioneAServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TestSuite/ConnessioneAServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Prova.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/Distribuzione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Distribuzione.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/RichiestaClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/RichiestaClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/UtenteLoggato.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Utente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/Utility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Partita.java" afterDir="false" />
+    <list default="true" id="fb60f921-36f9-403f-ae18-061ae56cfd3c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +73,7 @@
       <workItem from="1683267647660" duration="2074000" />
       <workItem from="1683903714528" duration="625000" />
       <workItem from="1683958989196" duration="13690000" />
-      <workItem from="1684481335162" duration="275000" />
+      <workItem from="1684481335162" duration="363000" />
     </task>
     <task id="LOCAL-00001" summary="test server">
       <created>1682755370349</created>
@@ -114,7 +103,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683268430542</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Finito non testato">
+      <created>1684481669653</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1684481669653</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
