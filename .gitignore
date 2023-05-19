@@ -1,6 +1,5 @@
 ### IntelliJ IDEA ###
 out/
-.idea/
 target/
 scopone-client-server.iml
 !**/src/main/**/out/
