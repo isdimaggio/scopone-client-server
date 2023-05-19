@@ -4,10 +4,10 @@ import java.util.Objects;
 
 import static Server.Main.listaUtenti;
 
-public class Utility {
+public class Partita {
 
-    public static UtenteLoggato autenticazione(String id) throws Exception{
-        for(UtenteLoggato u : listaUtenti){
+    public static Utente autenticazione(String id) throws Exception{
+        for(Utente u : listaUtenti){
             if(Objects.equals(id, u.getId())){
                 return u;
             }
@@ -16,7 +16,7 @@ public class Utility {
     }
 
     public static String getTurno(){
-        for(UtenteLoggato u : listaUtenti){
+        for(Utente u : listaUtenti){
             if(u.isMioTurno()){
                 return u.getId();
             }
@@ -39,5 +39,27 @@ public class Utility {
                 return;
             }
         }
+    }
+
+    public static boolean partitaFinita(){
+        // la partita è finita quando tutti e quattro i mazzi dei client sono vuoti
+        boolean finita = true;
+        for (Utente utente: listaUtenti) {
+            if (!utente.getMazzoUtente().isEmpty()) {
+                finita = false;
+                break;
+            }
+        }
+        return finita;
+    }
+
+    public static int mazzoVincitePiuGrosso(){
+        int vinte = 0;
+        for (Utente utente: listaUtenti) {
+            if(utente.getMazzoVinte().size() > vinte){
+               vinte = utente.getMazzoVinte().size();
+            }
+        }
+        return vinte;
     }
 }

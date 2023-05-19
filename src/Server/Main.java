@@ -1,22 +1,20 @@
 package Server;
 
+import Commons.Carta;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import static Server.Utility.autenticazione;
-import static Server.Utility.getTurno;
+import static Server.Partita.*;
 
 public class Main {
 
     static ServerSocket serverSocket;
-
-    static List<UtenteLoggato> listaUtenti = new ArrayList<>();
-    static String[] mappaCarte;
-    static int mappeUsate = 0;
+    static ArrayList<Utente> listaUtenti = new ArrayList<>();
+    static ArrayList<Carta> mazzoServer = new ArrayList<>();
 
     public static void main(String[] args) {
          try {
@@ -29,9 +27,13 @@ public class Main {
          String comando = "";
 
          // genera la mappa delle carte
-         mappaCarte = Distribuzione.creaMappaCarte();
+        try {
+            mazzoServer = Distribuzione.creaMazzoServer();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-         // ascolta per le connessioni in ingresso con un loop infinito
+        // ascolta per le connessioni in ingresso con un loop infinito
          while(!Objects.equals(comando, "terminaServer")){
 
              try{
@@ -63,7 +65,7 @@ public class Main {
 
     }
 
-    private static String elaborazione(String richiesta){
+    private static String elaborazione(String richiesta) {
         int comando;
         String parametro;
         try{
@@ -83,7 +85,7 @@ public class Main {
                 }
 
                 // controlla che lo username non esista gia
-                for (UtenteLoggato utente : listaUtenti) {
+                for (Utente utente : listaUtenti) {
                     if(Objects.equals(utente.getUsername(), parametro)){
                         System.out.println("Username in uso");
                         return "EU";
@@ -91,42 +93,37 @@ public class Main {
                 }
 
                 // va bene
-                UtenteLoggato nuovoUtente = new UtenteLoggato(parametro);
+                Utente nuovoUtente = new Utente(parametro);
                 listaUtenti.add(nuovoUtente);
                 return "OK" + nuovoUtente.getId();
             }
             case RichiestaClient.DISTRIBUZ_COMMAND -> {
                 // autentica il client
-                UtenteLoggato utenteLoggato;
+                Utente utente;
                 try {
-                    utenteLoggato = autenticazione(parametro);
+                    utente = autenticazione(parametro);
                 }
                 catch (Exception e){
                     System.out.println("Auth fallita");
                     return "ER"; // implementare err specifico
                 }
 
-                // no carte se non 4 utenti
+                // no carte se non QUATTRO utenti
                 if(listaUtenti.size() != 4) {
                     System.out.println("Lobby non piena");
                     return "WA";
                 }
 
-                // controlla se ci sono ancora mappe
-                if(mappeUsate > 3){
-                    System.out.println("Tutte le mappe usate");
-                    return "ER"; // implementare err specifico
-                }
-
                 // vedi se il client ha già richiesto
-                if(utenteLoggato.isMazzoRichiesto()){
+                if(utente.isMazzoRichiesto()){
                     System.out.println("Quel client ha gia richiesto il mazzo");
                     return "ER"; // implementare err specifico
                 }
 
-                mappeUsate++;
-                utenteLoggato.setMazzoRichiesto();
-                return mappaCarte[mappeUsate-1];
+                // prendi 10 carte a caso dal mazzo del server e consegnale al client
+                utente.setMazzoRichiesto();
+                Distribuzione.distribuisciDaServerAClient(mazzoServer, utente);
+                return "CR" + Distribuzione.mazzoToString(utente.getMazzoUtente());
 
             }
             case RichiestaClient.MOVE_REQUEST_COMMAND -> {
@@ -137,9 +134,9 @@ public class Main {
                 }
 
                 // autentica il client
-                UtenteLoggato utenteLoggato;
+                Utente utente;
                 try {
-                    utenteLoggato = autenticazione(parametro);
+                    utente = autenticazione(parametro);
                 }
                 catch (Exception e){
                     System.out.println("Auth fallita");
@@ -147,7 +144,7 @@ public class Main {
                 }
 
                 // vedi se è il turno del client
-                if(Objects.equals(utenteLoggato.getId(), getTurno())){
+                if(Objects.equals(utente.getId(), getTurno())){
                     System.out.println("È il turno per il client richiedente");
                     return "TX";
                 }else{
@@ -158,9 +155,9 @@ public class Main {
             }
             case RichiestaClient.QUIT_COMMAND -> {
                 // autentica il client
-                UtenteLoggato utenteLoggato;
+                Utente utente;
                 try {
-                    utenteLoggato = autenticazione(parametro);
+                    utente = autenticazione(parametro);
                 }
                 catch (Exception e){
                     System.out.println("Auth fallita");
@@ -168,12 +165,125 @@ public class Main {
                 }
 
                 // autenticazione ok esci dalla partita
-                listaUtenti.remove(utenteLoggato);
+                Distribuzione.ritiraCarteClient(mazzoServer, listaUtenti);
+                listaUtenti.remove(utente);
                 return "PI";
+            }
+            case RichiestaClient.MOVE_PLAY_COMMAND -> {
+                // vedi se ci sono abbastanza giocatori, altrimenti interrompi la partita
+                if(listaUtenti.size() != 4){
+                    System.out.println("Partita interrotta, non abbastanza utenti");
+                    return "PI";
+                }
+
+                // split dei parametri
+                String[] parametri = parametro.split(",");
+                if(parametri.length != 3) return "ER";
+
+                // autentica il client
+                Utente utente;
+                try {
+                    utente = autenticazione(parametri[0]);
+                }
+                catch (Exception e){
+                    System.out.println("Auth fallita");
+                    return "ER"; // implementare err specifico
+                }
+
+                // vedi se è il turno del client
+                if(!Objects.equals(utente.getId(), getTurno())){
+                    System.out.println("Non è il turno per il client richiedente");
+                    return "TI";
+                }
+
+                // controlla se la carta che il client vuole giocare è effettivamente nel suo mazzo
+                // crea oggetto carta a partire dai parametri
+                Carta cartaDaGiocare;
+                try {
+                    cartaDaGiocare = new Carta(parametri[1]);
+                }catch (Exception e){
+                    System.out.println("Carta fornita non valida");
+                    return "ER";
+                }
+
+                // la carta esiste, rimuovila dal mazzo utente
+                utente.getMazzoUtente().remove(cartaDaGiocare);
+
+                // controlla se una carta dello stesso valore è presente sul tavolo
+                for(Carta cartaSuTavolo : mazzoServer){
+                    if (cartaSuTavolo.getValore() == cartaDaGiocare.getValore()){
+                        // esiste, inserisci giocata (e server) nel mazzo vinte
+                        utente.aggiungiAMazzoVinte(cartaDaGiocare);
+                        utente.aggiungiAMazzoVinte(cartaSuTavolo);
+
+                        // rimuovi la carta vinta dal mazzo del server
+                        mazzoServer.remove(cartaSuTavolo);
+
+                        avanzaTurno();
+                        return "AF";
+                    }
+                }
+
+                // non c'è sul tavolo, aggiungila al mazzo server
+                mazzoServer.add(cartaDaGiocare);
+                avanzaTurno();
+                return "AF";
+            }
+            case RichiestaClient.GET_STATE_COMMAND -> {
+                // vedi se ci sono abbastanza giocatori, altrimenti interrompi la partita
+                if(listaUtenti.size() != 4){
+                    System.out.println("Partita interrotta, non abbastanza utenti");
+                    return "PI";
+                }
+
+                // autentica il client
+                try {
+                    autenticazione(parametro);
+                }
+                catch (Exception e){
+                    System.out.println("Auth fallita");
+                    return "ER"; // implementare err specifico
+                }
+
+                StringBuilder listaCarte = new StringBuilder("CR");
+                for(Carta cartaSuTavolo : mazzoServer){
+                    listaCarte.append(cartaSuTavolo.toString());
+                }
+
+                return listaCarte.toString();
+            }
+            case RichiestaClient.GET_WIN_COMMAND ->{
+                // vedi se ci sono abbastanza giocatori, altrimenti interrompi la partita
+                if(listaUtenti.size() != 4) {
+                    System.out.println("Partita interrotta, non abbastanza utenti");
+                    return "PI";
+                }
+
+                // autentica il client
+                Utente utente;
+                try {
+                    utente = autenticazione(parametro);
+                }
+                catch (Exception e){
+                    System.out.println("Auth fallita");
+                    return "ER"; // implementare err specifico
+                }
+
+                if(!partitaFinita()) return "IC";
+                int conteggioUtente = utente.getMazzoVinte().size();
+
+                // la partita è finita, vedi il vincitore
+                if(mazzoVincitePiuGrosso() == conteggioUtente){
+                    System.out.println("Partita vinta da " + utente.getUsername() + "con carte: " + conteggioUtente);
+                    return "PV" + conteggioUtente;
+                }else{
+                    return "PP" + conteggioUtente;
+                }
             }
             default -> {
                 return "ER";
             }
+
         }
     }
 

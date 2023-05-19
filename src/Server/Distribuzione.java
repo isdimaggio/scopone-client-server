@@ -1,44 +1,60 @@
 package Server;
 
+import Commons.Carta;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class Distribuzione {
 
-    public static String[] creaMappaCarte() {
-        ArrayList<String> cards = new ArrayList<>();
-        String[] semi = {"C", "S", "B", "D"};
-        String[] valori = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+    static ArrayList<Carta> creaMazzoServer() throws Exception {
+        ArrayList<Carta> arrayList = new ArrayList<>();
 
-        for (String seme : semi) {
-            for (String valore : valori) {
-                cards.add( seme + valore );
+        // per tutti i semi
+        for (char seme: Carta.LISTA_SEMI) {
+            // per tutti i valori
+            for(int i = 1; i < 11; i++){
+                arrayList.add(new Carta(seme, i));
             }
         }
 
-        // mischia la lista di carte
-        Collections.shuffle(cards);
+        Collections.shuffle(arrayList); // mischia il mazzo
+        return arrayList;
+    }
 
-        // distribuzione delle carte
-        ArrayList<String>[] hands = new ArrayList[4];
-
-        for (int i = 0; i < 4; i++) {
-            hands[i] = new ArrayList<String>();
+    static void distribuisciDaServerAClient(
+            ArrayList<Carta> mazzoServer,
+            Utente client
+    ){
+        for(int i = 0; i < 10; i++){
+            Random rand = new Random();
+            int index = rand.nextInt(mazzoServer.size());
+            client.aggiungiAMazzo(mazzoServer.get(index));
+            mazzoServer.remove(index);
         }
+    }
 
-        for (int i = 0; i < 40; i++) {
-            hands[i % 4].add(cards.get(i));
+    static String mazzoToString(ArrayList<Carta> mazzo){
+        StringBuilder stringa = new StringBuilder();
+        for (Carta carta:
+             mazzo) {
+            stringa.append(carta.toString());
         }
+        return stringa.toString();
+    }
 
-        String[] handsString = new String[4];
-        for (int i = 0; i < 4; i++) {
-            handsString[i] = "";
-            for (int j = 0; j < 10; j++) {
-                handsString[i] += "CR"+hands[i].get(j);
-            }
+    static void ritiraCarteClient(
+            ArrayList<Carta> mazzoServer,
+            ArrayList<Utente> listaClient
+    ){
+        for (Utente utente: listaClient) {
+            utente.setMazzoRichiesto(false);
+            mazzoServer.addAll(utente.getMazzoUtente());
+            mazzoServer.addAll(utente.getMazzoVinte());
+            utente.getMazzoUtente().clear();
         }
-
-        return handsString;
+        Collections.shuffle(mazzoServer);
     }
 
 }

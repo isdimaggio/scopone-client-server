@@ -4,10 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb60f921-36f9-403f-ae18-061ae56cfd3c" name="Changes" comment="">
+    <list default="true" id="fb60f921-36f9-403f-ae18-061ae56cfd3c" name="Changes" comment="Finito non testato">
+      <change afterPath="$PROJECT_DIR$/src/Commons/Carta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prova Client Server.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ConnessioneAServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TestSuite/ConnessioneAServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Prova.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/Distribuzione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Distribuzione.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/RichiestaClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/RichiestaClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/UtenteLoggato.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Utente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/Utility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Partita.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +55,19 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -59,7 +81,10 @@
       <workItem from="1683015070952" duration="4077000" />
       <workItem from="1683140033816" duration="10000" />
       <workItem from="1683184017377" duration="633000" />
-      <workItem from="1683267647660" duration="763000" />
+      <workItem from="1683267647660" duration="2074000" />
+      <workItem from="1683903714528" duration="625000" />
+      <workItem from="1683958989196" duration="13690000" />
+      <workItem from="1684481335162" duration="275000" />
     </task>
     <task id="LOCAL-00001" summary="test server">
       <created>1682755370349</created>
@@ -82,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683017959938</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="implementazione altri pezzi di protocollo">
+      <created>1683268430542</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1683268430542</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -103,7 +135,9 @@
     <MESSAGE value="test server" />
     <MESSAGE value="client non può richiedere piu volte il mazzo&#10;distribuzione fixata" />
     <MESSAGE value="puntatore turni" />
-    <option name="LAST_COMMIT_MESSAGE" value="puntatore turni" />
+    <MESSAGE value="implementazione altri pezzi di protocollo" />
+    <MESSAGE value="Finito non testato" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finito non testato" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -114,6 +148,11 @@
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="listaUtenti" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/DistribuzCarte$Prova.ic" NAME="Prova Coverage Results" MODIFIED="1682149024685" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
