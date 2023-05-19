@@ -1,0 +1,15 @@
+LEGGETE IL PROTOCOLLO prima di fare casino che non funziona niente
+SE ci sono problemi fatemi sapere chissà li sistemiamo
+
+Il server se compilato di default ascolta sulla porta 777, basta poco per cambiare
+nel main la porta in cui ascolta.
+
+SE NON RIUSCITE A COMPILARE
+- sta il file jar lo potete eseguire con "java -jar scopone-server.jar"
+- dal vostro client vi connettete a uno di questi server tutti sulla porta 777
+	- astra.e.flowopia.com
+	- explora.e.flowopia.com
+	- falcare.e.flowopia.com
+	- itdimaggio.edu.it
+
+i server saranno spenti definitivamente il 28 maggio
