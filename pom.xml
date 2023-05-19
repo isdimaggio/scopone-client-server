@@ -23,7 +23,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>dev.vitto.Server.Main</mainClass>
+                            <mainClass>Server.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -9,5 +9,8 @@
         <module name="serverscopone" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="scopone-client-server" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
