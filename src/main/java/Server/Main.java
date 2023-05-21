@@ -178,7 +178,7 @@ public class Main {
 
                 // split dei parametri
                 String[] parametri = parametro.split(",");
-                if(parametri.length != 3) return "ER";
+                if(parametri.length != 2) return "ER";
 
                 // autentica il client
                 Utente utente;
@@ -211,7 +211,16 @@ public class Main {
 
                 // controlla se una carta dello stesso valore è presente sul tavolo
                 for(Carta cartaSuTavolo : mazzoServer){
-                    if (cartaSuTavolo.getValore() == cartaDaGiocare.getValore()){
+                    if (cartaDaGiocare.getValore() == 1){
+                        utente.aggiungiAMazzoVinte(cartaDaGiocare);
+                        for(Carta cartaTavolo : mazzoServer){
+                            utente.aggiungiAMazzoVinte(cartaTavolo);
+                            mazzoServer.remove(cartaTavolo);
+                        }
+                        avanzaTurno();
+                        return "AF";
+                    }
+                    else if (cartaSuTavolo.getValore() == cartaDaGiocare.getValore()){
                         // esiste, inserisci giocata (e server) nel mazzo vinte
                         utente.aggiungiAMazzoVinte(cartaDaGiocare);
                         utente.aggiungiAMazzoVinte(cartaSuTavolo);
