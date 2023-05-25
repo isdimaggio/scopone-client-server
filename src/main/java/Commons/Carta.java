@@ -1,5 +1,7 @@
 package Commons;
 
+import java.util.ArrayList;
+
 public class Carta {
 
     // COSTANTI VALORI SEMI
@@ -14,12 +16,12 @@ public class Carta {
 
     public Carta(char s, int v) throws Exception {
 
-        if(s != SEME_BASTONE && s != SEME_DENARO && s != SEME_SPADA && s != SEME_COPPA){
+        if (s != SEME_BASTONE && s != SEME_DENARO && s != SEME_SPADA && s != SEME_COPPA) {
             throw new Exception("Seme non valido");
         }
 
-        if(v < 1 || v > 10){
-            throw new Exception("Valore non valido");
+        if (v < 1 || v > 10) {
+            throw new Exception("Valore non valido (" + v + ")");
         }
 
         this.seme = s;
@@ -34,6 +36,42 @@ public class Carta {
         );
     }
 
+    private static char rawToChar(String raw) {
+        return raw.charAt(0);
+    }
+
+    private static int rawToInt(String raw) {
+        int v = Integer.parseInt(
+                String.valueOf(
+                        raw.charAt(1)));
+
+        if (v == 0) v = 10;
+
+        return v;
+    }
+
+    public static ArrayList<Carta> deserializeMazzo(String mazzoS) throws Exception {
+        ArrayList<Carta> mazzo = new ArrayList<>();
+
+        if (mazzoS.length() == 0) {
+            return mazzo;
+        }
+
+        for (int i = 0; i < mazzoS.length(); i += 2) {
+            if (i + 1 < mazzoS.length()) {
+                char seme = mazzoS.charAt(i);
+                char valore = mazzoS.charAt(i + 1);
+                int valok = Integer.parseInt(String.valueOf(valore));
+
+                mazzo.add(new Carta(
+                        seme,
+                        valok == 0 ? 10 : valok
+                ));
+            }
+        }
+        return mazzo;
+    }
+
     public char getSeme() {
         return seme;
     }
@@ -43,21 +81,7 @@ public class Carta {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.valueOf(seme) + (valore != 10 ? valore : 0);
-    }
-
-    private static char rawToChar(String raw){
-        return raw.charAt(0);
-    }
-
-    private static int rawToInt(String raw){
-        int v = Integer.parseInt(
-                String.valueOf(
-                        raw.charAt(1)));
-
-        if (v == 0) v = 10;
-
-        return v;
     }
 }

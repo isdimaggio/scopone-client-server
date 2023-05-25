@@ -17,16 +17,14 @@ public class Main {
     static ArrayList<Carta> mazzoServer = new ArrayList<>();
 
     public static void main(String[] args) {
-         try {
-             serverSocket = new ServerSocket(777);
-         }catch (Exception e){
-             System.err.println("Impossibile aprire il socket: " + e.getMessage());
-             return;
-         }
+        try {
+            serverSocket = new ServerSocket(777);
+        } catch (Exception e) {
+            System.err.println("Impossibile aprire il socket: " + e.getMessage());
+            return;
+        }
 
-         String comando = "";
-
-         // genera la mappa delle carte
+        String comando = "";// genera la mappa delle carte
         try {
             mazzoServer = Distribuzione.creaMazzoServer();
         } catch (Exception e) {
@@ -34,59 +32,69 @@ public class Main {
         }
 
         // ascolta per le connessioni in ingresso con un loop infinito
-         while(!Objects.equals(comando, "terminaServer")){
+        while (!Objects.equals(comando, "terminaServer")) {
 
-             try{
-                 Socket client = serverSocket.accept();
-                 System.out.println("ACK: " + client.getRemoteSocketAddress().toString());
-                 BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            try {
+                Socket client = serverSocket.accept();
+                System.out.println("ACK: " + client.getRemoteSocketAddress().toString());
+                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-                 // Lettura richiesta dal client
-                 comando = in.readLine();
-                 if(Objects.equals(comando, "terminaServer")) continue;
+                // Lettura richiesta dal client
+                comando = in.readLine();
+                if (Objects.equals(comando, "terminaServer")) continue;
 
-                 // risposta
-                 String risposta = elaborazione(comando);
-                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+                // risposta
+                String risposta = elaborazione(comando);
+                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 
-                 System.out.println("REQ: " + comando + " \nRES: " + risposta);
+                System.out.println("REQ: " + comando + " \nRES: " + risposta);
 
-                 out.write(risposta);
-                 out.flush();
-                 client.close();
-                 in.close();
-                 out.close();
+                out.write(risposta);
+                out.flush();
+                client.close();
+                in.close();
+                out.close();
 
-             } catch (IOException e) {
-                 throw new RuntimeException(e);
-             }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-         }
+        }
 
     }
 
     private static String elaborazione(String richiesta) {
+        if (Objects.equals(richiesta, "remoteReset")) {
+            listaUtenti.clear();
+            try {
+                mazzoServer = Distribuzione.creaMazzoServer();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("RESET REMOTO INIZIATO");
+            return "RESET";
+        }
         int comando;
         String parametro;
-        try{
+        try {
             RichiestaClient richiestaClient = new RichiestaClient(richiesta);
             comando = richiestaClient.getCommand();
             parametro = richiestaClient.getParameter();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("EXCP: " + e.getMessage());
             return "ER";
         }
         switch (comando) {
             case RichiestaClient.LOGIN_COMMAND -> {
                 // controlla se il server non è pieno!
-                if(listaUtenti.size() > 3){
+                if (listaUtenti.size() > 3) {
                     System.out.println("Server pieno, rifiutando");
                     return "MX";
                 }
 
                 // controlla che lo username non esista gia
                 for (Utente utente : listaUtenti) {
-                    if(Objects.equals(utente.getUsername(), parametro)){
+                    if (Objects.equals(utente.getUsername(), parametro)) {
                         System.out.println("Username in uso");
                         return "EU";
                     }
@@ -102,20 +110,19 @@ public class Main {
                 Utente utente;
                 try {
                     utente = autenticazione(parametro);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Auth fallita");
                     return "ER"; // implementare err specifico
                 }
 
                 // no carte se non QUATTRO utenti
-                if(listaUtenti.size() != 4) {
+                if (listaUtenti.size() != 4) {
                     System.out.println("Lobby non piena");
                     return "WA";
                 }
 
                 // vedi se il client ha già richiesto
-                if(utente.isMazzoRichiesto()){
+                if (utente.isMazzoRichiesto()) {
                     System.out.println("Quel client ha gia richiesto il mazzo");
                     return "ER"; // implementare err specifico
                 }
@@ -128,7 +135,7 @@ public class Main {
             }
             case RichiestaClient.MOVE_REQUEST_COMMAND -> {
                 // vedi se ci sono abbastanza giocatori, altrimenti interrompi la partita
-                if(listaUtenti.size() != 4){
+                if (listaUtenti.size() != 4) {
                     System.out.println("Partita interrotta, non abbastanza utenti");
                     return "PI";
                 }
@@ -137,17 +144,16 @@ public class Main {
                 Utente utente;
                 try {
                     utente = autenticazione(parametro);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Auth fallita");
                     return "ER"; // implementare err specifico
                 }
 
                 // vedi se è il turno del client
-                if(Objects.equals(utente.getId(), getTurno())){
+                if (Objects.equals(utente.getId(), getTurno())) {
                     System.out.println("È il turno per il client richiedente");
                     return "TX";
-                }else{
+                } else {
                     System.out.println("Non è il turno per il client richiedente");
                     return "TN";
                 }
@@ -158,8 +164,7 @@ public class Main {
                 Utente utente;
                 try {
                     utente = autenticazione(parametro);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Auth fallita");
                     return "ER"; // implementare err specifico
                 }
@@ -171,27 +176,26 @@ public class Main {
             }
             case RichiestaClient.MOVE_PLAY_COMMAND -> {
                 // vedi se ci sono abbastanza giocatori, altrimenti interrompi la partita
-                if(listaUtenti.size() != 4){
+                if (listaUtenti.size() != 4) {
                     System.out.println("Partita interrotta, non abbastanza utenti");
                     return "PI";
                 }
 
                 // split dei parametri
                 String[] parametri = parametro.split(",");
-                if(parametri.length != 2) return "ER";
+                if (parametri.length != 2) return "ER";
 
                 // autentica il client
                 Utente utente;
                 try {
                     utente = autenticazione(parametri[0]);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Auth fallita");
                     return "ER"; // implementare err specifico
                 }
 
                 // vedi se è il turno del client
-                if(!Objects.equals(utente.getId(), getTurno())){
+                if (!Objects.equals(utente.getId(), getTurno())) {
                     System.out.println("Non è il turno per il client richiedente");
                     return "TI";
                 }
@@ -201,7 +205,7 @@ public class Main {
                 Carta cartaDaGiocare;
                 try {
                     cartaDaGiocare = new Carta(parametri[1]);
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Carta fornita non valida");
                     return "ER";
                 }
@@ -210,17 +214,16 @@ public class Main {
                 Distribuzione.rimuoviCartaDaMazzo(utente.getMazzoUtente(), cartaDaGiocare);
 
                 // controlla se una carta dello stesso valore è presente sul tavolo
-                for(Carta cartaSuTavolo : mazzoServer){
-                    if (cartaDaGiocare.getValore() == 1){
+                for (Carta cartaSuTavolo : mazzoServer) {
+                    if (cartaDaGiocare.getValore() == 1) {
                         utente.aggiungiAMazzoVinte(cartaDaGiocare);
-                        for(Carta cartaTavolo : mazzoServer){
+                        for (Carta cartaTavolo : mazzoServer) {
                             utente.aggiungiAMazzoVinte(cartaTavolo);
                             Distribuzione.rimuoviCartaDaMazzo(mazzoServer, cartaTavolo);
                         }
                         avanzaTurno();
                         return "AF";
-                    }
-                    else if (cartaSuTavolo.getValore() == cartaDaGiocare.getValore()){
+                    } else if (cartaSuTavolo.getValore() == cartaDaGiocare.getValore()) {
                         // esiste, inserisci giocata (e server) nel mazzo vinte
                         utente.aggiungiAMazzoVinte(cartaDaGiocare);
                         utente.aggiungiAMazzoVinte(cartaSuTavolo);
@@ -240,7 +243,7 @@ public class Main {
             }
             case RichiestaClient.GET_STATE_COMMAND -> {
                 // vedi se ci sono abbastanza giocatori, altrimenti interrompi la partita
-                if(listaUtenti.size() != 4){
+                if (listaUtenti.size() != 4) {
                     System.out.println("Partita interrotta, non abbastanza utenti");
                     return "PI";
                 }
@@ -248,22 +251,21 @@ public class Main {
                 // autentica il client
                 try {
                     autenticazione(parametro);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Auth fallita");
                     return "ER"; // implementare err specifico
                 }
 
                 StringBuilder listaCarte = new StringBuilder("CR");
-                for(Carta cartaSuTavolo : mazzoServer){
+                for (Carta cartaSuTavolo : mazzoServer) {
                     listaCarte.append(cartaSuTavolo.toString());
                 }
 
                 return listaCarte.toString();
             }
-            case RichiestaClient.GET_WIN_COMMAND ->{
+            case RichiestaClient.GET_WIN_COMMAND -> {
                 // vedi se ci sono abbastanza giocatori, altrimenti interrompi la partita
-                if(listaUtenti.size() != 4) {
+                if (listaUtenti.size() != 4) {
                     System.out.println("Partita interrotta, non abbastanza utenti");
                     return "PI";
                 }
@@ -272,20 +274,19 @@ public class Main {
                 Utente utente;
                 try {
                     utente = autenticazione(parametro);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Auth fallita");
                     return "ER"; // implementare err specifico
                 }
 
-                if(!partitaFinita()) return "IC";
+                if (!partitaFinita()) return "IC";
                 int conteggioUtente = utente.getMazzoVinte().size();
 
                 // la partita è finita, vedi il vincitore
-                if(mazzoVincitePiuGrosso() == conteggioUtente){
+                if (mazzoVincitePiuGrosso() == conteggioUtente) {
                     System.out.println("Partita vinta da " + utente.getUsername() + "con carte: " + conteggioUtente);
                     return "PV" + conteggioUtente;
-                }else{
+                } else {
                     return "PP" + conteggioUtente;
                 }
             }
