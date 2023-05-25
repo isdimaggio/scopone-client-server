@@ -207,7 +207,7 @@ public class Main {
                 }
 
                 // la carta esiste, rimuovila dal mazzo utente
-                utente.getMazzoUtente().remove(cartaDaGiocare);
+                Distribuzione.rimuoviCartaDaMazzo(utente.getMazzoUtente(), cartaDaGiocare);
 
                 // controlla se una carta dello stesso valore è presente sul tavolo
                 for(Carta cartaSuTavolo : mazzoServer){
@@ -215,7 +215,7 @@ public class Main {
                         utente.aggiungiAMazzoVinte(cartaDaGiocare);
                         for(Carta cartaTavolo : mazzoServer){
                             utente.aggiungiAMazzoVinte(cartaTavolo);
-                            mazzoServer.remove(cartaTavolo);
+                            Distribuzione.rimuoviCartaDaMazzo(mazzoServer, cartaTavolo);
                         }
                         avanzaTurno();
                         return "AF";
@@ -226,7 +226,7 @@ public class Main {
                         utente.aggiungiAMazzoVinte(cartaSuTavolo);
 
                         // rimuovi la carta vinta dal mazzo del server
-                        mazzoServer.remove(cartaSuTavolo);
+                        Distribuzione.rimuoviCartaDaMazzo(mazzoServer, cartaSuTavolo);
 
                         avanzaTurno();
                         return "AF";

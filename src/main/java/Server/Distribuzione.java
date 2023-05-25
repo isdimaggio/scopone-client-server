@@ -57,4 +57,17 @@ public class Distribuzione {
         Collections.shuffle(mazzoServer);
     }
 
+    static void rimuoviCartaDaMazzo(
+            ArrayList<Carta> mazzoServer,
+            Carta carta
+    ){
+        for(int i = 0; i < mazzoServer.size(); i++){
+            Carta sele = mazzoServer.get(i);
+            if(sele.getValore() == carta.getValore() && sele.getSeme() == carta.getSeme()){
+                mazzoServer.remove(i);
+                return;
+            }
+        }
+    }
+
 }
