@@ -221,6 +221,17 @@ public class Main {
 
         /*
          * TEST No 11 *******************************
+         * Testa se la richiesta di partita vinta
+         * ritorna con un partita in corso
+         * */
+        try {
+            testResult(c1.partitaVinta() == 0, "Partita ancora in corso");
+        } catch (ScoponeException e) {
+            testResult(false, "Partita ancora in corso [ERR " + e.getMessage() + "]");
+        }
+
+        /*
+         * TEST No 12 *******************************
          * Esci con un client dalla partita e controlla
          * se la partita viene interrotta per tutti.
          * */
@@ -258,7 +269,7 @@ public class Main {
         testResult(test11pass, "Quit partita iniziativa di un solo client");
 
         /*
-         * TEST No 12 *******************************
+         * TEST No 13 *******************************
          * Ricollega tutti quanti i client e verifica
          * che il tavolo contenga di nuovo tutte e
          * 40 le carte.
@@ -268,7 +279,16 @@ public class Main {
             c2 = new ClientScopone(address, port, "ts2client");
             c3 = new ClientScopone(address, port, "ts3client");
             c4 = new ClientScopone(address, port, "ts4client");
-            testResult(c1.requestTavolo().size() == 40, "Riconnessione e conteggio carte restituite");
+            c1.requestMazzo();
+            c2.requestMazzo();
+            c3.requestMazzo();
+            c4.requestMazzo();
+
+            testResult(c1.getMazzo().size() == 10
+                    && c2.getMazzo().size() == 10
+                    && c3.getMazzo().size() == 10
+                    && c4.getMazzo().size() == 10, "Riconnessione e conteggio carte restituite");
+
         } catch (ScoponeException e) {
             testResult(false, "Riconnessione e conteggio carte restituite [ERR " + e.getMessage() + "]");
         }

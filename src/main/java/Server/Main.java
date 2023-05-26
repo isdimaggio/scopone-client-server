@@ -24,7 +24,7 @@ public class Main {
             return;
         }
 
-        String comando = "";// genera la mappa delle carte
+        String comando = ""; // genera la mappa delle carte
         try {
             mazzoServer = Distribuzione.creaMazzoServer();
         } catch (Exception e) {
@@ -55,8 +55,8 @@ public class Main {
                 in.close();
                 out.close();
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                System.err.println("EXCP: " + e.getMessage());
             }
 
         }
@@ -86,6 +86,15 @@ public class Main {
         }
         switch (comando) {
             case RichiestaClient.LOGIN_COMMAND -> {
+                // se il server è vuoto rigenera il mazzo
+                // bugfix terribile per server che hanno tanta latenza e raccolgono male
+                if(listaUtenti.size() == 0){
+                    try{
+                        mazzoServer.clear();
+                        mazzoServer = Distribuzione.creaMazzoServer();
+                    }catch (Exception ignored) {}
+                }
+
                 // controlla se il server non è pieno!
                 if (listaUtenti.size() > 3) {
                     System.out.println("Server pieno, rifiutando");
@@ -213,28 +222,31 @@ public class Main {
                 // la carta esiste, rimuovila dal mazzo utente
                 Distribuzione.rimuoviCartaDaMazzo(utente.getMazzoUtente(), cartaDaGiocare);
 
-                // controlla se una carta dello stesso valore è presente sul tavolo
-                for (Carta cartaSuTavolo : mazzoServer) {
-                    if (cartaDaGiocare.getValore() == 1) {
-                        utente.aggiungiAMazzoVinte(cartaDaGiocare);
-                        for (Carta cartaTavolo : mazzoServer) {
-                            utente.aggiungiAMazzoVinte(cartaTavolo);
-                            Distribuzione.rimuoviCartaDaMazzo(mazzoServer, cartaTavolo);
-                        }
-                        avanzaTurno();
-                        return "AF";
-                    } else if (cartaSuTavolo.getValore() == cartaDaGiocare.getValore()) {
-                        // esiste, inserisci giocata (e server) nel mazzo vinte
-                        utente.aggiungiAMazzoVinte(cartaDaGiocare);
+                if(cartaDaGiocare.getValore() == 1){
+                    // prendi tutte le carte
+                    utente.aggiungiAMazzoVinte(cartaDaGiocare);
+                    for (Carta cartaSuTavolo : mazzoServer) {
                         utente.aggiungiAMazzoVinte(cartaSuTavolo);
+                    }
+                    mazzoServer.clear();
+                    avanzaTurno();
+                    return "AF";
+                }else{
+                    for (Carta cartaSuTavolo : mazzoServer) {
+                        if (cartaSuTavolo.getValore() == cartaDaGiocare.getValore()) {
+                            // esiste, inserisci giocata (e server) nel mazzo vinte
+                            utente.aggiungiAMazzoVinte(cartaDaGiocare);
+                            utente.aggiungiAMazzoVinte(cartaSuTavolo);
 
-                        // rimuovi la carta vinta dal mazzo del server
-                        Distribuzione.rimuoviCartaDaMazzo(mazzoServer, cartaSuTavolo);
+                            // rimuovi la carta vinta dal mazzo del server
+                            Distribuzione.rimuoviCartaDaMazzo(mazzoServer, cartaSuTavolo);
 
-                        avanzaTurno();
-                        return "AF";
+                            avanzaTurno();
+                            return "AF";
+                        }
                     }
                 }
+
 
                 // non c'è sul tavolo, aggiungila al mazzo server
                 mazzoServer.add(cartaDaGiocare);
@@ -257,8 +269,20 @@ public class Main {
                 }
 
                 StringBuilder listaCarte = new StringBuilder("CR");
-                for (Carta cartaSuTavolo : mazzoServer) {
-                    listaCarte.append(cartaSuTavolo.toString());
+
+                // bugfix orribile (se la partita non è ancora iniziato forza tavolo vuoto
+                // per risolvere problemi di client che renderizzano male
+
+                boolean iniziata = false;
+
+                for(Utente user : listaUtenti){
+                    iniziata = user.isMazzoRichiesto();
+                }
+
+                if(iniziata){
+                    for (Carta cartaSuTavolo : mazzoServer) {
+                        listaCarte.append(cartaSuTavolo.toString());
+                    }
                 }
 
                 return listaCarte.toString();

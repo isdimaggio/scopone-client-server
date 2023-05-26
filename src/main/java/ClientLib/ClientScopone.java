@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 public class ClientScopone {
 
+    public static final int GAME_PLAYING = 0;
+    public static final int GAME_WON = 1;
+    public static final int GAME_LOST = -1;
+
     private final String address;
     private final int port;
     private final String username;
@@ -144,8 +148,17 @@ public class ClientScopone {
 
         // TODO: fare autoplay per bene
         // per il momento prende la prima carta del mazzo
-        Carta cartaSelezionata = mazzo.get(0);
+        Carta carta = mazzo.get(0);
+        giocaCarta(carta);
+    }
 
+    public void giocaCarta(Carta cartaSelezionata) throws ScoponeException{
+        if(toDispose){
+            throw new ScoponeException("Partita terminata", ScoponeException.ERR_GAME_FINISHED);
+        }
+        if(!mazzo.contains(cartaSelezionata)){
+            throw new ScoponeException("Carta non nel mazzo", ScoponeException.ERR_CARD_NOT_IN_DECK);
+        }
         RispostaServer res;
         try{
             res = SocketManager.richiesta(
@@ -157,6 +170,35 @@ public class ClientScopone {
             case "AF" -> {
                 // carta giocata, rimuovi da mazzo locale
                 mazzo.remove(cartaSelezionata);
+            }
+            case "PI" -> {
+                toDispose = true;
+                throw new ScoponeException("Partita terminata", ScoponeException.ERR_GAME_FINISHED);
+            }
+            default -> throw new ScoponeException("Errore generico", ScoponeException.ERR_SERVER_GENERIC);
+        }
+    }
+
+    public int partitaVinta() throws ScoponeException{
+        if(toDispose){
+            throw new ScoponeException("Partita terminata", ScoponeException.ERR_GAME_FINISHED);
+        }
+
+        RispostaServer res;
+        try{
+            res = SocketManager.richiesta("VP" + clientId, address, port);
+        }catch (Exception e){
+            throw new ScoponeException(e.getMessage(), ScoponeException.ERR_SOCKET);
+        }
+        switch (res.getStatusCode()){
+            case "PV" -> {
+                return 1;
+            }
+            case "PP" -> {
+                return -1;
+            }
+            case "IC" -> {
+                return 0;
             }
             case "PI" -> {
                 toDispose = true;

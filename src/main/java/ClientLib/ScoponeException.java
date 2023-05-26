@@ -11,6 +11,7 @@ public class ScoponeException extends Exception{
     public static final int ERR_SERVER_GENERIC = 3;
     public static final int ERR_LOBBY_NOT_FULL = 4;
     public static final int ERR_GAME_FINISHED = 5;
+    public static final int ERR_CARD_NOT_IN_DECK = 6;
 
 
     private final int errorCode;
