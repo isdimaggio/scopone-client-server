@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="951044c2-116e-4910-ad5f-6c00e7f9d77c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ClientLib/StatoPartita.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ClientLib/ClientScopone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ClientLib/ClientScopone.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Server/Partita.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server/Partita.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/TestSuite/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/TestSuite/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Commons/Carta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Commons/Carta.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
