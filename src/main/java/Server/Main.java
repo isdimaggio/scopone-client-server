@@ -270,7 +270,7 @@ public class Main {
 
                 // bugfix orribile (se la partita non è ancora iniziato forza tavolo vuoto
                 // per risolvere problemi di client che renderizzano male
-                if(Partita.iniziata()){
+                if(Partita.partitaIniziata()){
                     return "CR" + Distribuzione.mazzoToString(mazzoServer);
                 }
                 return "CR";

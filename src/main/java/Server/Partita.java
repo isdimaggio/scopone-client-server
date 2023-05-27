@@ -26,7 +26,7 @@ public class Partita {
         return listaUtenti.get(0).getId();
     }
 
-    public static boolean iniziata() {
+    public static boolean partitaIniziata() {
         boolean b = true;
         for(Utente user : listaUtenti){
             if(user.isMazzoRichiesto()){
