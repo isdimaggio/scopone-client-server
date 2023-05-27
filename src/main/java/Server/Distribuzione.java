@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class Distribuzione {
 
+    // creazione Mazzo Arraylist di oggetti Carta
     static ArrayList<Carta> creaMazzoServer() throws Exception {
         ArrayList<Carta> arrayList = new ArrayList<>();
 
@@ -23,6 +24,7 @@ public class Distribuzione {
         return arrayList;
     }
 
+    // distribuzione 10 carte al client rimuovendole dal mazzo del server
     static void distribuisciDaServerAClient(
             ArrayList<Carta> mazzoServer,
             Utente client
@@ -35,15 +37,17 @@ public class Distribuzione {
         }
     }
 
+    // creazione stringa da mazzo di tipo Arraylist
     static String mazzoToString(ArrayList<Carta> mazzo){
         StringBuilder stringa = new StringBuilder();
         for (Carta carta:
              mazzo) {
-            stringa.append(carta.toString());
+            stringa.append(carta.toString()); // append() utilizzato per concatenare stringhe a un oggetto StringBuilder o StringBuffer
         }
         return stringa.toString();
     }
 
+    // ritiro carte dai client e creazione nuovo mazzo
     static void ritiraCarteClient(
             ArrayList<Carta> mazzoServer,
             ArrayList<Utente> listaClient
@@ -57,6 +61,7 @@ public class Distribuzione {
         Collections.shuffle(mazzoServer);
     }
 
+    // rimozione carta da mazzo per ovviare problemi con metodo nativo liste
     static void rimuoviCartaDaMazzo(
             ArrayList<Carta> mazzoServer,
             Carta carta
