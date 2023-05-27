@@ -6,10 +6,6 @@ import java.util.ArrayList;
 
 public class ClientScopone {
 
-    public static final int GAME_PLAYING = 0;
-    public static final int GAME_WON = 1;
-    public static final int GAME_LOST = -1;
-
     private final String address;
     private final int port;
     private final String username;
@@ -146,7 +142,7 @@ public class ClientScopone {
             throw new ScoponeException("Partita terminata", ScoponeException.ERR_GAME_FINISHED);
         }
 
-        // TODO: fare autoplay per bene
+        // TODO: fare autoplay per bene con un algoritmo sensato
         // per il momento prende la prima carta del mazzo
         Carta carta = mazzo.get(0);
         giocaCarta(carta);
@@ -179,7 +175,7 @@ public class ClientScopone {
         }
     }
 
-    public int partitaVinta() throws ScoponeException{
+    public StatoPartita isPartitaVinta() throws ScoponeException{
         if(toDispose){
             throw new ScoponeException("Partita terminata", ScoponeException.ERR_GAME_FINISHED);
         }
@@ -192,13 +188,19 @@ public class ClientScopone {
         }
         switch (res.getStatusCode()){
             case "PV" -> {
-                return 1;
+                return new StatoPartita(
+                        StatoPartita.GAME_WON,
+                        Integer.parseInt(res.getParameter())
+                );
             }
             case "PP" -> {
-                return -1;
+                return new StatoPartita(
+                        StatoPartita.GAME_LOST,
+                        Integer.parseInt(res.getParameter())
+                );
             }
             case "IC" -> {
-                return 0;
+                return new StatoPartita(StatoPartita.GAME_PLAYING);
             }
             case "PI" -> {
                 toDispose = true;

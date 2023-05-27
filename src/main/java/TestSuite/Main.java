@@ -2,6 +2,7 @@ package TestSuite;
 
 import ClientLib.ClientScopone;
 import ClientLib.ScoponeException;
+import ClientLib.StatoPartita;
 
 import java.util.Scanner;
 
@@ -225,7 +226,10 @@ public class Main {
          * ritorna con un partita in corso
          * */
         try {
-            testResult(c1.partitaVinta() == 0, "Partita ancora in corso");
+            testResult(
+                    c1.isPartitaVinta().getStatoPartita() == StatoPartita.GAME_PLAYING,
+                    "Partita ancora in corso"
+            );
         } catch (ScoponeException e) {
             testResult(false, "Partita ancora in corso [ERR " + e.getMessage() + "]");
         }
@@ -284,7 +288,8 @@ public class Main {
             c3.requestMazzo();
             c4.requestMazzo();
 
-            testResult(c1.getMazzo().size() == 10
+            testResult(
+                    c1.getMazzo().size() == 10
                     && c2.getMazzo().size() == 10
                     && c3.getMazzo().size() == 10
                     && c4.getMazzo().size() == 10, "Riconnessione e conteggio carte restituite");
@@ -293,7 +298,59 @@ public class Main {
             testResult(false, "Riconnessione e conteggio carte restituite [ERR " + e.getMessage() + "]");
         }
 
-        // TODO: a partita ricominciata testare se le carte vengono vinte, se l'asso vince tutto e poi alla fine chi
-        // vince la partita, sviluppare anche un autoplayer fatto per bene
+        /*
+         * TEST No 14 *******************************
+         * Continua a giocare la partita finchè non
+         * si verifica una vincita.
+         * Se tutti i client hanno terminato e ci sono
+         * una vincita e 3 perdite PASS.
+         * */
+        try{
+            while (c1.isPartitaVinta().getStatoPartita() == StatoPartita.GAME_PLAYING) {
+                c1.autoPlay();
+                c2.autoPlay();
+                c3.autoPlay();
+                c4.autoPlay();
+            }
+
+            int[] statiClient = {
+                    c1.isPartitaVinta().getStatoPartita(),
+                    c2.isPartitaVinta().getStatoPartita(),
+                    c3.isPartitaVinta().getStatoPartita(),
+                    c4.isPartitaVinta().getStatoPartita()
+            };
+
+            for(int st : statiClient){
+                if(st == 0) testResult(false, "Completamento partita (client ancora in wait)");
+                break;
+            }
+
+            int win = 0, loss = 0;
+            for(int st: statiClient){
+                if(st == StatoPartita.GAME_WON) win++;
+                if(st == StatoPartita.GAME_LOST) loss++;
+            }
+
+            testResult(win == 1 && loss == 3, "Completamento partita");
+        }catch (ScoponeException e){
+            testResult(false, "Completamento partita [ERR " + e.getMessage() + "]");
+        }
+
+        /*
+         * TEST No 14 *******************************
+         * Continua a giocare la partita finchè non
+         * si verifica una vincita.
+         * Se tutti i client hanno terminato e ci sono
+         * una vincita e 3 perdite PASS.
+         * */
+        try{
+            c1.disconnect();
+            c2.disconnect();
+            c3.disconnect();
+            c4.disconnect();
+            testResult(true, "Disconnessione finale");
+        }catch (ScoponeException e){
+            testResult(false, "Completamento partita [ERR " + e.getMessage() + "]");
+        }
     }
 }

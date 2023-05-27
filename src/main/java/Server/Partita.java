@@ -26,6 +26,17 @@ public class Partita {
         return listaUtenti.get(0).getId();
     }
 
+    public static boolean iniziata() {
+        boolean b = true;
+        for(Utente user : listaUtenti){
+            if(user.isMazzoRichiesto()){
+                b = false;
+                break;
+            }
+        }
+        return b;
+    }
+
     public static void avanzaTurno(){
         for(int i = 0; i < listaUtenti.size(); i++){
             if(listaUtenti.get(i).isMioTurno()){

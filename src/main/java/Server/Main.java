@@ -268,24 +268,12 @@ public class Main {
                     return "ER"; // implementare err specifico
                 }
 
-                StringBuilder listaCarte = new StringBuilder("CR");
-
                 // bugfix orribile (se la partita non è ancora iniziato forza tavolo vuoto
                 // per risolvere problemi di client che renderizzano male
-
-                boolean iniziata = false;
-
-                for(Utente user : listaUtenti){
-                    iniziata = user.isMazzoRichiesto();
+                if(Partita.iniziata()){
+                    return "CR" + Distribuzione.mazzoToString(mazzoServer);
                 }
-
-                if(iniziata){
-                    for (Carta cartaSuTavolo : mazzoServer) {
-                        listaCarte.append(cartaSuTavolo.toString());
-                    }
-                }
-
-                return listaCarte.toString();
+                return "CR";
             }
             case RichiestaClient.GET_WIN_COMMAND -> {
                 // vedi se ci sono abbastanza giocatori, altrimenti interrompi la partita
