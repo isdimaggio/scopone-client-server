@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="951044c2-116e-4910-ad5f-6c00e7f9d77c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ClientLib/StatoPartita.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ClientLib/ClientScopone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ClientLib/ClientScopone.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Server/Partita.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server/Partita.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/TestSuite/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/TestSuite/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +125,7 @@
       <workItem from="1684874258302" duration="154000" />
       <workItem from="1684874418756" duration="3000" />
       <workItem from="1685029000923" duration="24273000" />
-      <workItem from="1685109186120" duration="10892000" />
+      <workItem from="1685109186120" duration="11392000" />
     </task>
     <task id="LOCAL-00001" summary="metodo rimozione che funziona 100%">
       <created>1685029296702</created>
@@ -152,7 +148,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685113964985</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="bugfix">
+      <created>1685170182293</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1685170182293</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -162,6 +165,7 @@
     <MESSAGE value="metodo rimozione che funziona 100%" />
     <MESSAGE value="test suite quasi completa + lib. client&#10;vedere todo per cose che mancano" />
     <MESSAGE value="fix asso&#10;test suite quasi completa + lib. client" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix asso&#10;test suite quasi completa + lib. client" />
+    <MESSAGE value="bugfix" />
+    <option name="LAST_COMMIT_MESSAGE" value="bugfix" />
   </component>
 </project>
